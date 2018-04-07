@@ -1,0 +1,63 @@
+buildscript {
+    ext {
+        springBootVersion = '2.0.0.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath "gradle.plugin.com.palantir.gradle.docker:gradle-docker:0.19.2"
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+apply plugin: 'com.palantir.docker'
+
+group = 'com.bobsbest'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = 9
+
+repositories {
+    mavenCentral()
+    maven { url "https://repo.spring.io/milestone" }
+}
+
+docker {
+    name "hub.docker.com/cjcmd/${jar.baseName}"
+    files jar.archivePath
+    buildArgs(['JAR_FILE': "${jar.archiveName}"])
+}
+
+ext {
+    springCloudVersion = 'Finchley.M9'
+}
+
+dependencies {
+//    compile('org.springframework.boot:spring-boot-starter-data-mongodb')
+    compile('org.springframework.boot:spring-boot-starter-hateoas')
+    compile('org.springframework.boot:spring-boot-starter-mustache')
+//    compile('org.springframework.boot:spring-boot-starter-security')
+    compile('org.springframework.boot:spring-boot-starter-web')
+//    compile('org.springframework.cloud:spring-cloud-starter-aws')
+//    compile('org.springframework.cloud:spring-cloud-starter-aws-jdbc')
+//    compile('org.springframework.cloud:spring-cloud-starter-aws-messaging')
+    runtime('org.springframework.boot:spring-boot-devtools')
+    runtime('org.postgresql:postgresql')
+    compileOnly('org.springframework.boot:spring-boot-configuration-processor')
+    compileOnly('org.projectlombok:lombok')
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+//    testCompile('org.springframework.security:spring-security-test')
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
+}
