@@ -2,7 +2,7 @@ DROP TABLE IF exists bobsbest_dev.CustomerAddress;
 
 CREATE TABLE bobsbest_dev.CustomerAddress (
   CUSTOMER_REF_ID varchar(20) references bobsbest_dev.Customer(REF_ID),
-  TYPE varchar(20),
+  ADDRESS_TYPE varchar(20),
   ATTN varchar(100),
   FIRST_NAME varchar(50),
   LAST_NAME varchar(50),

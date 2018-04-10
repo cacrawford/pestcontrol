@@ -3,14 +3,11 @@ package com.bobsbest.pestcontrol.controllers;
 import com.bobsbest.pestcontrol.models.Customer;
 import com.bobsbest.pestcontrol.services.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController("customer")
+@RestController
 public class CustomerController {
 
     private CustomerService customerService;
@@ -20,22 +17,22 @@ public class CustomerController {
         this.customerService = customerService;
     }
 
-    @RequestMapping("/{refId}")
+    @RequestMapping("customer/{refId}")
     public Customer getCustomer(@PathVariable String refId) {
         return customerService.getCustomer(refId);
     }
 
-    @RequestMapping(value = "/", method = RequestMethod.POST)
-    public void addCustomer(Customer customer) {
+    @RequestMapping(value = "customer", method = RequestMethod.POST)
+    public void addCustomer(@RequestBody Customer customer) {
         customerService.addCustomer(customer);
     }
 
-    @RequestMapping(value = "/{refId", method = RequestMethod.DELETE)
-    public void deleteCustomer(String refId) {
-        customerService.removeCustomer(refId);
+    @RequestMapping(value = "customer/{refId}", method = RequestMethod.POST)
+    public void updateCustomer(@PathVariable String refId, @RequestBody Customer customer) {
+        customerService.updateCustomer(refId, customer);
     }
 
-    @RequestMapping("/")
+    @RequestMapping("customer")
     public List<Customer> getCustomers() {
         return customerService.getCustomers();
     }

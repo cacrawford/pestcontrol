@@ -19,6 +19,7 @@ apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'com.palantir.docker'
+apply plugin: 'groovy'
 
 group = 'com.bobsbest'
 version = '0.0.1-SNAPSHOT'
@@ -40,22 +41,24 @@ ext {
 }
 
 dependencies {
-//    compile('org.springframework.boot:spring-boot-starter-data-mongodb')
     compile('org.springframework.boot:spring-boot-starter-hateoas')
     compile('org.springframework.boot:spring-boot-starter-mustache')
 //    compile('org.springframework.boot:spring-boot-starter-security')
     compile('org.springframework.boot:spring-boot-starter-web')
     compile("org.springframework:spring-jdbc")
     compile('org.springframework.cloud:spring-cloud-starter-aws')
-//    compile('org.springframework.cloud:spring-cloud-aws-autoconfigure')
     compile('org.springframework.cloud:spring-cloud-starter-aws-jdbc')
-//    compile('org.springframework.cloud:spring-cloud-starter-aws-messaging')
+    compile group: 'com.google.guava', name: 'guava', version: '24.1-jre'
+    compile group: 'org.codehaus.groovy', name: 'groovy-all', version: '2.4.15'
     runtime('org.springframework.boot:spring-boot-devtools')
     runtime('org.postgresql:postgresql')
     compileOnly('org.springframework.boot:spring-boot-configuration-processor')
     compileOnly('org.projectlombok:lombok')
     testCompile('org.springframework.boot:spring-boot-starter-test')
-//    testCompile('org.springframework.security:spring-security-test')
+    testCompile group: 'org.spockframework', name: 'spock-core', version: '1.1-groovy-2.4'
+    testCompile group: 'org.spockframework', name: 'spock-spring', version: '1.1-groovy-2.4'
+
+    testCompile('org.springframework.security:spring-security-test')
 }
 
 dependencyManagement {
