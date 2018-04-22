@@ -34,6 +34,40 @@ public class CustomerService {
     public void updateCustomer(String refId, Customer customer) {
     }
 
+    public void addPhone(String refId, CustomerPhone phone) {
+        jdbc.update(
+                CustomerSql.ADD_CUSTOMER_PHONE.getSql(),
+                ImmutableMap.<String, Object>builder()
+                        .put("refId", refId)
+                        .put("phoneNumber", phone.getPhoneNumber())
+                        .put("phoneType", phone.getType())
+                        .put("isPrimary", phone.isPrimary())
+                        .put("useForText", phone.isUseForText())
+                        .build());
+    }
+
+    public void addEmail(String refId, CustomerEmail email) {
+        jdbc.update(
+                CustomerSql.ADD_CUSTOMER_EMAIL.getSql(),
+                ImmutableMap.<String, Object>builder()
+                        .put("refId", refId)
+                        .put("emailAddress", email.getEmailAddress())
+                        .put("isPrimary", email.isPrimary())
+                        .build());
+    }
+
+    public void addComment(String refId, CustomerComment comment) {
+        jdbc.update(
+                CustomerSql.ADD_CUSTOMER_COMMENT.getSql(),
+                ImmutableMap.<String, Object>builder()
+                        .put("refId", refId)
+                        .put("comment", comment.getComment())
+                        .put("source", comment.getSource())
+                        .put("dateAdded", comment.getDateAdded())
+                        .put("userName", comment.getUser())
+                        .build());
+    }
+
     public Customer getCustomer(String refId) {
         List<CustomerAddress> addresses = jdbc.query(
                 CustomerSql.GET_CUSTOMER_ADDRESSES.getSql(),
@@ -144,47 +178,15 @@ public class CustomerService {
     }
 
     private void maybeWriteCustomerComments(Customer customer) {
-        customer.getComments().forEach(comment ->
-                jdbc.update(
-                        CustomerSql.ADD_CUSTOMER_COMMENT.getSql(),
-                        ImmutableMap.<String, Object>builder()
-                                .put("refId", customer.getRefId())
-                                .put("comment", comment.getComment())
-                                .put("source", comment.getSource())
-                                .put("dateAdded", comment.getDateAdded())
-                                .put("userName", comment.getUser())
-                                .build()
-                )
-        );
+        customer.getComments().forEach(comment -> addComment(customer.getRefId(), comment));
     }
 
     private void maybeWriteCustomerEmails(Customer customer) {
-        customer.getEmails().forEach(email ->
-                jdbc.update(
-                        CustomerSql.ADD_CUSTOMER_EMAIL.getSql(),
-                        ImmutableMap.<String, Object>builder()
-                                .put("refId", customer.getRefId())
-                                .put("emailAddress", email.getEmailAddress())
-                                .put("isPrimary", email.isPrimary())
-                                .build()
-
-                )
-        );
+        customer.getEmails().forEach(email -> addEmail(customer.getRefId(), email));
     }
 
     private void maybeWriteCustomerPhones(Customer customer) {
-        customer.getPhoneNumbers().forEach(phone ->
-                jdbc.update(
-                        CustomerSql.ADD_CUSTOMER_PHONE.getSql(),
-                        ImmutableMap.<String, Object>builder()
-                                .put("refId", customer.getRefId())
-                                .put("phoneNumber", phone.getPhoneNumber())
-                                .put("phoneType", phone.getType())
-                                .put("isPrimary", phone.isPrimary())
-                                .put("useForText", phone.isUseForText())
-                                .build()
-                )
-        );
+        customer.getPhoneNumbers().forEach(phone -> addPhone(customer.getRefId(), phone));
     }
 
     private LocalDate toLocalDate(Date date) {
