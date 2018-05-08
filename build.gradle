@@ -24,7 +24,7 @@ apply plugin: 'com.palantir.docker'
 apply plugin: 'groovy'
 
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = 9
+sourceCompatibility = 8
 
 repositories {
     mavenCentral()
