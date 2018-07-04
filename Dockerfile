@@ -6,7 +6,7 @@
 #
 
 # Pull base image.
-FROM ubuntu:17.10
+FROM ubuntu:18.04
 
 VOLUME /tmp
 ARG JAR_FILE
